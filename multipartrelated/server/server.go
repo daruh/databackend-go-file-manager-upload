@@ -1,9 +1,9 @@
 package main
 
 import (
-	"encoding/base64"
 	"io"
 	"io/ioutil"
+	"log"
 	"mime"
 	"mime/multipart"
 	"net/http"
@@ -48,16 +48,23 @@ func main() {
 					panic(meta)
 				}
 			case "file":
-				var dataDecoded []byte
-				//part.Read(fileData)
-				base64.StdEncoding.
-					log.Printf("filesize = %d", len(fileBytes))
-				f, _ := os.Create(part.Header.Get("Content-Filename"))
+				//dst := make([]byte, base64.StdEncoding.DecodedLen(len(string(fileBytes))))
+				//n, err := base64.StdEncoding.Decode(dst, fileBytes)
+				//if err != nil {
+				//	fmt.Println("decode error:", err)
+				//	return
+				//}
+				//dst = dst[:n]
+				//fmt.Printf("%q\n", dst)
+				pathStore := "C:\\SNOW_FILES\\tempfiles\\"
+
+				log.Printf("filesize = %d", len(fileBytes))
+				f, _ := os.Create(pathStore + part.Header.Get("Content-Filename"))
 				f.Write(fileBytes)
 				f.Close()
 			}
 		}
 	})
 
-	http.ListenAndServe(":8080", mux)
+	http.ListenAndServe(":8089", mux)
 }

@@ -10,13 +10,15 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/textproto"
+	"path/filepath"
 	"time"
 )
 
 func main() {
 	flag.Parse()
 
-	positionalArgs := flag.Args()
+	//positionalArgs := flag.Args()
+	positionalArgs := []string{"C:\\SNOW_FILES\\test_pdf.pdf"}
 	if len(positionalArgs) == 0 {
 		log.Fatalf("This program requires at least 1 positional argument.")
 	}
@@ -31,6 +33,7 @@ func main() {
 	// Metadata part.
 	metadataHeader := textproto.MIMEHeader{}
 	metadataHeader.Set("Content-Type", "application/json")
+	metadataHeader.Set("Content-Disposition", "form-data; name=\"metadata\"")
 	metadataHeader.Set("Content-ID", "metadata")
 	part, err := writer.CreatePart(metadataHeader)
 	if err != nil {
@@ -44,10 +47,14 @@ func main() {
 		if errRead != nil {
 			log.Fatalf("Error reading media file: %v", errRead)
 		}
+
+		filename := filepath.Base(mediaFilename)
+
 		mediaHeader := textproto.MIMEHeader{}
-		mediaHeader.Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%v\".", mediaFilename))
+		mediaHeader.Set("Content-Disposition", fmt.Sprintf("form-data; name=\"file\"; filename=\"%v\"", filename))
 		mediaHeader.Set("Content-ID", "media")
-		mediaHeader.Set("Content-Filename", mediaFilename)
+		mediaHeader.Set("Content-Type", "application/octet-stream")
+		mediaHeader.Set("Content-Filename", filename)
 
 		mediaPart, err := writer.CreatePart(mediaHeader)
 		if err != nil {
@@ -68,7 +75,7 @@ func main() {
 	contentType := fmt.Sprintf("multipart/related; boundary=%s", writer.Boundary())
 
 	// Initialize HTTP Request and headers.
-	uploadURL := "http://localhost:8080/upload"
+	uploadURL := "http://localhost:8089/upload"
 	r, err := http.NewRequest(http.MethodPost, uploadURL, bytes.NewReader(body.Bytes()))
 	if err != nil {
 		log.Fatalf("Error initializing a request: %v", err)
