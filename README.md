@@ -25,3 +25,7 @@
 ### Medium
 `https://medium.com/akatsuki-taiwan-technology/uploading-large-files-in-golang-without-using-buffer-or-pipe-9b5aafacfc16`
 
+
+### Calling multipartrelated
+`go run .\client.go  "C:\SNOW_FILES\test_pdf.pdf" `
+
