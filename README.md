@@ -8,7 +8,6 @@ Multipart Content W3C
  Returning Values from Forms: multipart/form-data
 `https://datatracker.ietf.org/doc/html/rfc7578`
 
-
 Content-Disposition Header Field
 `https://datatracker.ietf.org/doc/html/rfc2183#section-2.3`
 
@@ -26,35 +25,65 @@ Key points:
 - example transfer of file + metadata to event could be by using Extension part of Event (let's call it "metadata")
 - well supported in go by using package multipart , https://pkg.go.dev/mime/multipart
 
+#### Example of request
+header:
+`Content-Type: multipart/form-data; boundary=abcd1234`
+
+body:
+```
+--abcd1234
+Content-ID" : "metadata"
+Content-Disposition: form-data; name="metadata"
+"Content-Type": "application/json; charset=UTF-8"
+
+{"name": "sample.pdf", "category": "report"}
+
+--abcd1234
+Content-Disposition: form-data; name="file"; filename="build.pdf"
+Content-Type: application/octet-stream
+[data]
+--abcd1234--
+```
 
 ### Go tus
 `https://github.com/eventials/go-tus/blob/05d0564bb571e81045012756065a8d002d717caf/upload.go#L49`
 `https://tus.io/faq.html`
 
-### Astaxie
+Key points:
+- library that allows to upload , download files in chunks (kind of streaming of data)
+- uses HTTP PATCHing and Headers to control the offset of chunks
+- metadata are sent through one header called "Upload-Metadata" and json is Encoded *)
+
+*) using this technique we could send file using standard http call (no need to change our internal libraries)
+
+### Other internet resources
+#### File upload golang
+`https://freshman.tech/file-upload-golang/`
+
+#### Astaxie
 `https://astaxie.gitbooks.io/build-web-application-with-golang/content/en/04.5.html`
 
-### Mohitcare
+#### Mohitcare
 `https://www.mohitkhare.com/blog/file-upload-golang/`
 
-### Multipart requests
+#### Multipart requests
 `https://ayada.dev/posts/multipart-requests-in-go/`
 
 `https://github.com/abvarun226/blog-source-code/blob/master/multipart-requests-in-go/multipart-related/server/main.go`
 
-### Upload google drive
+#### Upload google drive
 `https://freshman.tech/snippets/go/multipart-upload-google-drive/`
 
-### Upload files
+#### Upload files
 `https://gist.github.com/ayoisaiah/1e921f0934f5973b9f83e4060caf865a`
 
-### Zupzup
+#### Zupzup
 `https://github.com/zupzup/golang-http-file-upload-download/blob/main/upload.gtpl`
 
-### Medium
+#### Medium
 `https://medium.com/akatsuki-taiwan-technology/uploading-large-files-in-golang-without-using-buffer-or-pipe-9b5aafacfc16`
 
 
-### Calling multipartrelated
+### Demo Calling multipartrelated
 `go run .\client.go  "C:\SNOW_FILES\test_pdf.pdf" `
 
