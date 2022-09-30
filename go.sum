@@ -1,0 +1,8 @@
+github.com/ddosify/go-faker v0.1.1 h1:S18MhU7p237JLTwkOyjfMND1M/vdTLlEbTvv005kdRY=
+github.com/ddosify/go-faker v0.1.1/go.mod h1:59U3tEeBJY+7zXwZyuGpmfblEVb9yJ3hTPRPE8PC8SE=
+github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
+github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
+github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
+github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/jaswdr/faker v1.10.2 h1:GK03wuDqa8V6BE+2VRr3DJ/G4T0iUDCzVoBCj5TM4b8=
+github.com/jaswdr/faker v1.10.2/go.mod h1:x7ZlyB1AZqwqKZgyQlnqEG8FDptmHlncA5u2zY/yi6w=
