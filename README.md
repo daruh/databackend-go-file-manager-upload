@@ -85,7 +85,7 @@ Key points:
 
 
 ### Demo Calling multipartrelated
-`go run .\client.go  "C:\SNOW_FILES\test_pdf.pdf" `
+`go run .\client.go  "C:\temp\4mb.pdf" `
 `go run .\client.go  "C:\SNOW_FILES\test_large.pdf" `
 `go run .\client.go  "C:\SNOW_FILES\go.pdf" `
 
