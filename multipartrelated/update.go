@@ -42,7 +42,7 @@ func update(env, bearer, mediaFilename, fileId string) {
 
 	mediaHeader := textproto.MIMEHeader{}
 	mediaHeader.Set("Content-Disposition", fmt.Sprintf("form-data; name=\"file\"; filename=\"%v\"", filename))
-	mediaHeader.Set("Content-Length", string(size))
+	mediaHeader.Set("Content-Length", fmt.Sprint(size))
 	mediaHeader.Set("Content-Type", "application/octet-stream")
 	mediaHeader.Set("Content-Filename", filename)
 
@@ -62,7 +62,7 @@ func update(env, bearer, mediaFilename, fileId string) {
 
 	// Initialize HTTP Request and headers.
 
-	uploadURL := urls[env] + "/api/filemanager/tenants/" + parsedClaims["tenant"].(string) + "/users" + parsedClaims["sub"].(string) + "/files/" + fileId + "/upload"
+	uploadURL := urls[env] + "/api/filemanager/tenants/" + parsedClaims["tenant"].(string) + "/users/" + parsedClaims["sub"].(string) + "/files/" + fileId + "/upload"
 
 	r, err := http.NewRequest(http.MethodPut, uploadURL, bytes.NewReader(body.Bytes()))
 	if err != nil {
