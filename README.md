@@ -85,7 +85,9 @@ Key points:
 
 
 ### Demo Calling multipartrelated
-`go run .\client.go  "C:\temp\4mb.pdf" `
+`go run .\client.go  -cmd=update -file="C:\SNOW_FILES\go.pdf" -fileId=22ddaf0d04b5504b5709e0d0ffffc2c03ddf0000`
+`go run .\client.go  -cmd=upload -file="C:\SNOW_FILES\go.pdf"`
+
 `go run .\client.go  "C:\SNOW_FILES\test_large.pdf" `
-`go run .\client.go  "C:\SNOW_FILES\go.pdf" `
+`go run .\client.go  -cmd=update -file="C:\SNOW_FILES\go.pdf" `
 

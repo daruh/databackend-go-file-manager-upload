@@ -30,7 +30,7 @@ type SaveFile struct {
 	Tags       map[string]string `json:"tags"`
 }
 
-func upload(env, bearer, mediaFilename string) {
+func upload(url, bearer, mediaFilename string, parsedClaims jwt.MapClaims) {
 
 	// New multipart writer.
 	body := &bytes.Buffer{}
@@ -44,12 +44,6 @@ func upload(env, bearer, mediaFilename string) {
 		log.Fatalf("Error reading media file: %v", errRead)
 	}
 	size = int64(len(mediaData))
-
-	token, _ := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
-		return nil, nil
-	})
-
-	parsedClaims := token.Claims.(jwt.MapClaims)
 
 	faker := faker.NewFaker()
 	metadata := SaveFile{
@@ -107,7 +101,7 @@ func upload(env, bearer, mediaFilename string) {
 	}
 
 	// Initialize HTTP Request and headers.
-	uploadURL := urls[env] + "/api/filemanager/tenants/" + parsedClaims["tenant"].(string) + "/upload"
+	uploadURL := url + "/api/filemanager/tenants/" + parsedClaims["tenant"].(string) + "/upload"
 
 	r, err := http.NewRequest(http.MethodPost, uploadURL, bytes.NewReader(body.Bytes()))
 	if err != nil {

@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func update(env, bearer, mediaFilename, fileId string) {
+func update(url, bearer, mediaFilename, fileId string, parsedClaims jwt.MapClaims) {
 
 	// New multipart writer.
 	body := &bytes.Buffer{}
@@ -28,12 +28,6 @@ func update(env, bearer, mediaFilename, fileId string) {
 		log.Fatalf("Error reading media file: %v", errRead)
 	}
 	size = int64(len(mediaData))
-
-	token, _ := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
-		return nil, nil
-	})
-
-	parsedClaims := token.Claims.(jwt.MapClaims)
 
 	// Request Content-Type with boundary parameter.
 	contentType := fmt.Sprintf("multipart/form-data; boundary=%s", writer.Boundary())
@@ -62,7 +56,7 @@ func update(env, bearer, mediaFilename, fileId string) {
 
 	// Initialize HTTP Request and headers.
 
-	uploadURL := urls[env] + "/api/filemanager/tenants/" + parsedClaims["tenant"].(string) + "/users/" + parsedClaims["sub"].(string) + "/files/" + fileId + "/upload"
+	uploadURL := url + "/api/filemanager/tenants/" + parsedClaims["tenant"].(string) + "/users/" + parsedClaims["sub"].(string) + "/files/" + fileId + "/upload"
 
 	r, err := http.NewRequest(http.MethodPut, uploadURL, bytes.NewReader(body.Bytes()))
 	if err != nil {

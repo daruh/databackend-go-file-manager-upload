@@ -1,26 +1,67 @@
 package main
 
-var (
-	urls = map[string]string{"prod": "https://westeurope.dev-snowsoftware.io", "dev": "http://localhost:8008"}
+import (
+	"flag"
+	"fmt"
+	"github.com/dgrijalva/jwt-go"
+	"github.com/go-cmd/cmd"
+	"log"
+	"net/url"
 )
 
+const (
+	updateCmd = "update"
+	uploadCmd = "upload"
+)
+
+var (
+	snowcli = "C:\\SNOW\\SOURCES\\databackend-go-file-manager-upload\\multipartrelated\\snowcli.exe"
+)
+
+func RunCMD(name string, args ...string) (err error, stdout, stderr []string) {
+	c := cmd.NewCmd(name, args...)
+	s := <-c.Start()
+	stdout = s.Stdout
+	stderr = s.Stderr
+	return
+}
+
 func main() {
+	err, stdout, stderr := RunCMD(snowcli, "accounts", "get-access-token")
 
-	env := "dev"
-	bearer := "eyJhbGciOiJSUzI1NiIsImtpZCI6IkI1MTlGQjI1RDAwRDVEM0YxN0YwOThENzdGNDM0QzMwMzczQkRFQ0UiLCJ4NXQiOiJ0Um43SmRBTlhUOFg4SmpYZjBOTU1EYzczczQiLCJ0eXAiOiJhdCtqd3QifQ.eyJhdXRoX3RpbWUiOjE2NjU2NTEzMTUsInN1YiI6IjEzNDE3OWY0LTJjM2ItNDRkOS0xZWFkLTA4ZGFhNzliYjRjYiIsInRlbmFudCI6ImI0MWUzNDU0LWExOTMtNGM0NC0xMGFlLTA4ZGFhNzliYjRhNSIsInJlZ2lvbiI6Im5vcnRoZXVyb3BlIiwiYWNjIjoiNjk0YTU0OTItMGRlOS00YWMxLWEwOTQtMDhkYWE3OWJiNGNkIiwiZW1wbF90eXBlIjoicm5kIiwicm9sZSI6WyJzYWxlcy5tYW5hZ2VyIiwiaWQuaWRwLmFkbWluIl0sIm9pX3Byc3QiOiIxNWY2NDg5YS0yNzQ1LTQ1YmUtOTAzNy1mYTk3MmJkZDNiMDEiLCJjbGllbnRfaWQiOiIxNWY2NDg5YS0yNzQ1LTQ1YmUtOTAzNy1mYTk3MmJkZDNiMDEiLCJ0b2tfaWQiOiI2NzlhN2MwZS01OGE5LTRjYjUtYWI3MC00ZWQ5NDJjZjRjZGYiLCJhdWQiOlsiYXBpOi8vc25vd3NvZnR3YXJlLmlvL2FwaSIsImFwaTovL3Nub3dzb2Z0d2FyZS5pby9pZHAvYXBpIl0sInNjb3BlIjoibGljZW5zaW5nLmxpY2Vuc2UuY3J1ZCBhdWRpdC5sb2dzLmFjYy5yIGlkLnRlbmFudHMuY3J1ZCBpZC51c2Vycy5jcnVkIGlkLmFwcHMuY3J1ZCBpZC5jbGFpbXMuY3J1ZCBpZC5vcmdhbml6YXRpb25hbHVuaXRzLmNydWQgaWQuc3lzLnRyc2MgaWQuc3lzLmNydWQgaWQubG9naW5wcm92aWRlcnMuY3J1ZCBpZC5yb2xlcy5jcnVkIG9wZW5pZCBvZmZsaW5lX2FjY2VzcyIsImV4cCI6MTY2NTY2Nzc1NCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MTE4L2lkcCIsImlhdCI6MTY2NTY2NDE1NH0.ZvrlK-CQw7Heawk56r1Pkkzq-rD7DGZHUL5FdmVxfnYiRqTdbjRD25vMGlf4LEDZrhB8gDEu9Jfs8Ib4hHDPk0t4-R9Z3ZG_vugnu7kI9MQz1iYh5QG5gLTDz0LCN7MHL1Z1kD-Iaj_I674WYZBnVL3BQTNtCRwvB7LZ_tNMEztwX0hecT6xGytJ5T2iOCKi_4udGvzinvuO2eXAY1y4_62RY7PymomKEou7lmcP9V6LOxJ92EwkAD58nDljSqWmzAmQLJ6ff8MPf9PID0sNqyci1G7K58KJZRMgwaS_lYN3IyY-8MSTWEVio6j7Gs3YWMV5RB-wOpkN5G89QlJRIA"
+	if err != nil {
+		panic(stderr)
+	}
 
-	fileId := "22ddaf0d04b5504b5709e0d0ffffc2c03ddf0000"
+	bearer := stdout[0]
 
-	//positionalArgs := flag.Args()
-	//if len(positionalArgs) == 0 {
-	//	log.Fatalf("This program requires at least 1 positional argument.")
-	//}
+	command := flag.String("cmd", "", "string")
+	file := flag.String("file", "", "string")
+	fileId := flag.String("fileId", "", "string")
+	flag.Parse()
 
-	positionalArgs := []string{"C:\\temp\\4mb.pdf"}
+	token, _ := jwt.Parse(bearer, func(token *jwt.Token) (interface{}, error) {
+		return nil, nil
+	})
 
-	for _, mediaFilename := range positionalArgs {
-		//upload(env, bearer,mediaFilename)
-		update(env, bearer, mediaFilename, fileId)
+	parsedClaims := token.Claims.(jwt.MapClaims)
+
+	urlParsed, err := url.Parse(parsedClaims["iss"].(string))
+	if err != nil {
+		log.Fatal(err)
+	}
+	port := ""
+	if urlParsed.Hostname() == "localhost" {
+		port = ":8008"
+	}
+	baseUrl := urlParsed.Scheme + `://` + urlParsed.Hostname() + port
+
+	if *command == updateCmd {
+		update(baseUrl, bearer, *file, *fileId, parsedClaims)
+	} else if *command == uploadCmd {
+		upload(baseUrl, bearer, *file, parsedClaims)
+	} else {
+		fmt.Println("Not supported command")
 	}
 
 }

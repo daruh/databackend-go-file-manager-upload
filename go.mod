@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/ddosify/go-faker v0.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/go-cmd/cmd v1.4.1
 )
 
 require (
