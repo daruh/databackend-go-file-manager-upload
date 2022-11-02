@@ -85,9 +85,13 @@ Key points:
 
 
 ### Demo Calling multipartrelated
-`go run .\client.go  -cmd=update -file="C:\SNOW_FILES\go.pdf" -fileId=22ddaf0d04b5504b5709e0d0ffffc2c03ddf0000`
-`go run .\client.go  -cmd=upload -file="C:\SNOW_FILES\go.pdf"`
+`go run .  -cmd=upload -file="C:\temp\56kb.pdf"`
+`go run .  -cmd=upload -file="C:\temp\1mb.xlsx"`
+`go run .  -cmd=uploadbus -file="C:\temp\1mb.pdf"`
+`go run .  -cmd=upload -file="C:\temp\15mb.pdf"`
+`go run .  -cmd=update -file="C:\temp\4mb.pdf" -fileId=eba2b89106d95045ed0a0710f57e3f8816490000`
+`go run .  -cmd=update -file="C:\temp\15mb.pdf" -fileId=ec1c7ace0a4f404c4709c2a08e37d13ad0ff0000`
 
-`go run .\client.go  "C:\SNOW_FILES\test_large.pdf" `
-`go run .\client.go  -cmd=update -file="C:\SNOW_FILES\go.pdf" `
+`go run .\  "C:\SNOW_FILES\test_large.pdf" `
+`go run .  -cmd=update -file="C:\SNOW_FILES\go.pdf" `
 

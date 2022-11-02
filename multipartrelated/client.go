@@ -10,8 +10,9 @@ import (
 )
 
 const (
-	updateCmd = "update"
-	uploadCmd = "upload"
+	updateCmd    = "update"
+	uploadCmd    = "upload"
+	uploadBusCmd = "uploadbus"
 )
 
 var (
@@ -60,6 +61,8 @@ func main() {
 		update(baseUrl, bearer, *file, *fileId, parsedClaims)
 	} else if *command == uploadCmd {
 		upload(baseUrl, bearer, *file, parsedClaims)
+	} else if *command == uploadBusCmd {
+		uploadbus(baseUrl, bearer, *file, parsedClaims)
 	} else {
 		fmt.Println("Not supported command")
 	}
